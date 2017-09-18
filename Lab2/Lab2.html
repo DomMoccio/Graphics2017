@@ -1,0 +1,34 @@
+<!doctype html>
+<!--
+  Computer Graphics - Lab #2
+  Surface Shading
+-->
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <script src="Lab2.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div>
+      <span>Click on the canvas to set the position of:</span>
+      <input type="radio" name="params" id="lightPos" checked="checked"/>
+      <label for="lightPos"><b>l<b></label>
+      <input type="radio" name="params" id="eyePos"/>
+      <label for="lightPos"><b>e<b></label>
+    </div>
+    <div>
+      <label for="reflectance">Surface color:</label>
+      <input type="color" id="reflectance" value="#3366ff"
+        onchange="render();"/>
+    </div>
+    <div>
+      <label for="ambient">Ambient illumination:</label>
+      <input type="color" id="ambient" value="#333333"
+        onchange="render();"/>
+    </div>
+    <canvas id="viewport-main" width="1280" height="720" style="background-color: rgb(255,255,255);">
+      Your browser does not support HTML5! Upgrade now, you neanderthal!
+    </canvas>
+  </body>
+</html>
+
