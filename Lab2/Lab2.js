@@ -59,7 +59,7 @@ function render() {
   var diffuseColor = color;
   var specularColor = computerSpecular(lightColor,normalVec,eyeVec);
   var totalColor = color;
-  
+
 
   var refPos = [ 400, 480 ];
   var lightPos = [ 0, 0 ];
@@ -109,7 +109,7 @@ function render() {
 
 }
 // Compute specularColor
-function computerSpecular(lightColor,e, r){
+function computeSpecular(lightColor,e, r){
   var dotProd =dotProduct(e,r)
   if(dotProd<0){
     dotProd=0
