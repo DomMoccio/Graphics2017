@@ -3,6 +3,22 @@
  * Surface Shading
  *
  */
+ 
+ function createVector(point1, point2)
+ {
+	 var vec = [point2[0] - point1[0], point2[1] - point1[1]];
+	 return vec;
+ }
+ 
+ function hexToRgb(hex) {
+    var bigint = parseInt(hex, 16);
+    var r = (bigint >> 16) & 255;
+    var g = (bigint >> 8) & 255;
+    var b = bigint & 255;
+
+    return [r, g, b];
+}
+ 
 
 function lineToAngle(ctx, p, length, angle)
 {
