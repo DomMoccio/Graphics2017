@@ -3,8 +3,8 @@
  * Surface Shading
  *
  */
- 
- function init() {
+
+function init() {
     var canvas = document.getElementById("viewport-main");
     canvas.addEventListener('click', function(e) {
         if (document.getElementById("eyePos").checked)
@@ -16,8 +16,7 @@
     render();
 }
 
-function lineToAngle(ctx, p, length, angle)
-{
+function lineToAngle(ctx, p, length, angle) {
     ctx.beginPath();
 
     angle *= Math.PI / 180;
@@ -34,7 +33,7 @@ function lineToAngle(ctx, p, length, angle)
     return {x: x2, y: y2};
 }
 
-function render(){
+function render() {
   var canvas = document.getElementById("viewport-main");
   var ctx = canvas.getContext('2d');
 
