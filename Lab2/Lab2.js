@@ -57,9 +57,9 @@ function render() {
   var ambientColor = document.getElementById("ambient").value;
   // TODO implement Phong illumination model to compute shaded color
   var diffuseColor = color;
-  var specularColor = color;
+  var specularColor = computerSpecular(lightColor,normalVec,eyeVec);
   var totalColor = color;
-
+  
 
   var refPos = [ 400, 480 ];
   var lightPos = [ 0, 0 ];
@@ -98,6 +98,14 @@ function render() {
   lineToAngle(ctx, refPos, 150, -90 - phi);
 
 }
+// Compute specularColor
+function computerSpecular(lightColor,e, r){
+  var dotProd =dotProduct(e,r)
+  if(dotProd<0){
+    dotProd=0
+  }
+  var specColor= 1*lightColor*dotProd
+  return specColor
 
 function calcDiffuseColor(n, l, surfaceColor, lightColor){
   var dProduct = dotProduct(n,l);
