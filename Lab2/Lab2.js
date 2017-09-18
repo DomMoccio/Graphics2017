@@ -68,6 +68,16 @@ function render() {
   var normalVec = [ 0, 1 ];
   var lightVec = [ 0, 0 ];
   var eyeVec = [ 0, 0 ];
+  
+  function dotProduct(normalVec, lightVec) {
+	  var product = (normalVec[0]  * lightVec[0]) + (normalVec[1] * lightVec[1]);
+	  return product;
+  }
+  
+  function getAngle(product) {
+	  var angle = Math.acos(product);
+	  return angle;
+  }
 
   var param = document.querySelector("input[name='params']:checked").value;
   /*
