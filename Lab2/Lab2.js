@@ -58,6 +58,8 @@ function render(){
 
   ctx.fillStyle = color;
   ctx.fillRect(80, 480, 640, 40);
+  
+  diffuseColor = calcDiffuseColor(normalVec, lightVec, color, lightColor);
 
   ctx.fillStyle = diffuseColor;
   ctx.fillRect(1024, 120, 120, 120);
@@ -68,6 +70,18 @@ function render(){
   lineToAngle(ctx, refPos, 150, -90 - theta);
   lineToAngle(ctx, refPos, 150, -90 - phi);
 
+}
+
+function calcDiffuseColor(n, l, surfaceColor, lightColor){
+  var dProduct = dotProduct(n,l);
+  if(dProduct < 0)
+    dProduct = 0;
+  
+  var diffuseColor = surfaceColor * lightColor * dProduct;
+  if(diffuseColor > 1)
+	diffuseColor = 1;
+  
+  return diffuseColor;
 }
 
 window.onload = render;
