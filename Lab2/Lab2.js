@@ -22,17 +22,17 @@ function lineToAngle(ctx, p, length, angle)
     return {x: x2, y: y2};
 }
 
+function normalize(vec) {
+	var vector_length = Math.sqrt(vec[0]^2 + vec[1]^2)
+    vectorX = vec[0] / vector_length
+	vectorY = vec[1] / vector_length
+	normalVec = [vectorX, vectorY]
+	return(normalVec)
+}
+
 function render(){
   var canvas = document.getElementById("viewport-main");
   var ctx = canvas.getContext('2d');
-
-  var color = document.getElementById("reflectance").value;
-  var ambientColor = document.getElementById("ambient").value;
-  // TODO implement Phong illumination model to compute shaded color
-  var diffuseColor = color;
-  var specularColor = color;
-  var totalColor = color;
-
 
   var refPos = [ 400, 480 ];
   var lightPos = [ 0, 0 ];
@@ -43,19 +43,28 @@ function render(){
   var eyeVec = [ 0, 0 ];
 
   var param = document.querySelector("input[name='params']:checked").value;
-  /*
-   * Use conditional to change either light or eye position.
-
+  
+  // Use conditional to change either light or eye position.
   switch (param) {
-  case "e":
-  case "l":
-  default: break;
+	// e selected - Move eye vector
+	case "e":
+	
+	// l selected - Move light vector
+	case "l":
+	
+	default: break;
   }
-  */
-
+  
   var theta = 30;
   var phi = -45;
 
+  var color = document.getElementById("reflectance").value;
+  var ambientColor = document.getElementById("ambient").value;
+  // TODO implement Phong illumination model to compute shaded color
+  var diffuseColor = color;
+  var specularColor = color;
+  var totalColor = color;  
+  
   ctx.fillStyle = color;
   ctx.fillRect(80, 480, 640, 40);
 
