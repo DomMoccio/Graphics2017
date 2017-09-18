@@ -3,6 +3,18 @@
  * Surface Shading
  *
  */
+ 
+ function init() {
+    var canvas = document.getElementById("viewport-main");
+    canvas.addEventListener('click', function(e) {
+        if (document.getElementById("eyePos").checked)
+            eyePos = [ e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop ];
+        else if (document.getElementById("lightPos").checked)
+            lightPos = [ e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop ];
+        render();
+    });
+    render();
+}
 
 function lineToAngle(ctx, p, length, angle)
 {
@@ -70,5 +82,5 @@ function render(){
 
 }
 
-window.onload = render;
+window.onload = init;
 
