@@ -5,7 +5,6 @@
  */
 var lightPos = [ 200, 100 ];
 var eyePos = [ 725, 200 ];
-var hardness = 100;
 
 function createVector(point1, point2) {
   var vec = [point2[0] - point1[0], point2[1] - point1[1]];
@@ -98,10 +97,11 @@ function render() {
   var color = hexToRgb(document.getElementById("reflectance").value);
   var lightColor = hexToRgb(document.getElementById("light").value);
   var ambientColor = hexToRgb(document.getElementById("ambient").value);
+  var hardness = document.getElementById("hardness").value;
 
   // TODO implement Phong illumination model to compute shaded color
   var diffuseColor = calcDiffuseColors(normalVec, lightVec, color, lightColor);
-  var specularColor = computeSpeculars(lightColor, eyeVec, reflectVec);
+  var specularColor = computeSpeculars(lightColor, eyeVec, reflectVec, hardness);
   var totalColor = [
       Math.min(1.0, ambientColor[0] + diffuseColor[0] + specularColor[0]),
       Math.min(1.0, ambientColor[1] + diffuseColor[1] + specularColor[1]),
@@ -135,15 +135,15 @@ function calcDiffuseColors(n, l, surfColor, lightColor) {
   ];
 }
 
-function computeSpeculars(color, e, r) {
+function computeSpeculars(color, e, r, hardness) {
   return [
-    computeSpecular(color[0], e, r),
-    computeSpecular(color[1], e, r),
-    computeSpecular(color[2], e, r)
+    computeSpecular(color[0], e, r, hardness),
+    computeSpecular(color[1], e, r, hardness),
+    computeSpecular(color[2], e, r, hardness)
   ];
 }
 
-function computeSpecular(lightColor,e, r) {
+function computeSpecular(lightColor,e, r, hardness) {
   var dotProd = dotProduct(e, r);
   if (dotProd < 0) {
     dotProd = 0;
