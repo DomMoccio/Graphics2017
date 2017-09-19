@@ -3,6 +3,9 @@
  * Surface Shading
  *
  */
+var lightPos = [ 200, 100 ];
+var eyePos = [ 725, 200 ];
+var hardness = 100;
 
 function createVector(point1, point2) {
   var vec = [point2[0] - point1[0], point2[1] - point1[1]];
@@ -10,7 +13,6 @@ function createVector(point1, point2) {
 }
 
 function dotProduct(normalVec, lightVec) {
-  console.log(normalVec, lightVec);
   var product = (normalVec[0]  * lightVec[0]) + (normalVec[1] * lightVec[1]);
   return product;
 }
@@ -65,10 +67,10 @@ function lineToAngle(ctx, p, length, angle) {
 }
 
 function normalize(vec) {
-  var vector_length = Math.sqrt(vec[0]^2 + vec[1]^2)
-  var vectorX = vec[0] / vector_length
-  var vectorY = vec[1] / vector_length
-  var normalVec = [vectorX, vectorY]
+  var vector_length = Math.sqrt(vec[0]*vec[0] + vec[1]*vec[1]);
+  var vectorX = vec[0] / vector_length;
+  var vectorY = vec[1] / vector_length;
+  var normalVec = [vectorX, vectorY];
   return(normalVec)
 }
 
@@ -77,32 +79,46 @@ function render() {
   var canvas = document.getElementById("viewport-main");
   var ctx = canvas.getContext('2d');
 
-  var refPos = [ 400, 480 ];
-  var lightPos = [ 0, 0 ];
-  var eyePos = [ 0, 0 ];
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  var normalVec = [ 0, 1 ];
+  var refPos = [ 400, 480 ];
+  var normalVec = [ 0, -1 ];
+  var lightVec = normalize(createVector(refPos, lightPos));
+  var reflectVec = [ -lightVec[0], lightVec[1] ];
+  var eyeVec = normalize(createVector(refPos, eyePos));
 
   var param = document.querySelector("input[name='params']:checked").value;
 
-  var theta = 30;
-  var phi = -45;
+  var theta = 180 / Math.PI * Math.acos(dotProduct(normalVec, lightVec));
+  var phi = 180 / Math.PI * Math.acos(dotProduct(normalVec, eyeVec));
+  if (lightPos[0] > refPos[0]) { theta = -theta; }
+  if (eyePos[0] > refPos[0]) { phi = -phi; }
+
 
   var color = hexToRgb(document.getElementById("reflectance").value);
   var lightColor = hexToRgb(document.getElementById("light").value);
   var ambientColor = hexToRgb(document.getElementById("ambient").value);
-  console.log(color, lightColor, ambientColor);
+
   // TODO implement Phong illumination model to compute shaded color
   var diffuseColor = calcDiffuseColors(normalVec, lightVec, color, lightColor);
-  var specularColor = computeSpeculars(lightColor, normalVec, eyeVec);
-
-  var totalColor = ambientColor + diffuseColor + specularColor;
+  var specularColor = computeSpeculars(lightColor, eyeVec, reflectVec);
+  var totalColor = [
+      Math.min(1.0, ambientColor[0] + diffuseColor[0] + specularColor[0]),
+      Math.min(1.0, ambientColor[1] + diffuseColor[1] + specularColor[1]),
+      Math.min(1.0, ambientColor[2] + diffuseColor[2] + specularColor[2]),
+  ];
+  console.log(diffuseColor, specularColor, totalColor);
 
   ctx.fillStyle = rgbToHex(color);
   ctx.fillRect(80, 480, 640, 40);
 
+  ctx.beginPath();
+  ctx.rect(1024, 120, 120, 120);
   ctx.fillStyle = rgbToHex(totalColor);
-  ctx.fillRect(1024, 120, 120, 120);
+  ctx.fill();
+  ctx.strokeStyle = "#000000";
+  ctx.lineWidth = 5;
+  ctx.stroke();
 
   lineToAngle(ctx, refPos, 150, -90);
   lineToAngle(ctx, refPos, 150, -90 - theta);
@@ -132,7 +148,7 @@ function computeSpecular(lightColor,e, r) {
   if (dotProd < 0) {
     dotProd = 0;
   }
-  var specColor = 1 * lightColor * dotProd;
+  var specColor = 1 * lightColor * Math.pow(dotProd, hardness);
   return specColor;
 }
 
@@ -145,7 +161,6 @@ function calcDiffuseColor(n, l, surfaceColor, lightColor) {
   if (diffuseColor > 1)
   diffuseColor = 1;
 
-  console.log(surfaceColor, lightColor, diffuseColor);
   return diffuseColor;
 }
 
